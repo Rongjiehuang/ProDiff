@@ -1,0 +1,68 @@
+base_config:
+  - egs/egs_bases/tts/fs2.yaml
+
+# diffusion model
+diff_decoder_type: 'wavenet'
+dilation_cycle_length: 1
+residual_layers: 20
+residual_channels: 256
+keep_bins: 80
+spec_min: [ ]
+spec_max: [ ]
+diff_loss_type: l1
+timesteps: 100
+max_beta: 0.06
+
+
+# dataset
+preprocess_cls: egs.datasets.audio.lj.pre_align.LJPreAlign
+preprocess_args:
+  nsample_per_mfa_group: 1000
+  # text process
+  txt_processor: en
+  use_mfa: true
+  with_phsep: true
+  reset_phone_dict: true
+  reset_word_dict: true
+  add_eos_bos: true
+  # mfa
+  mfa_group_shuffle: false
+  mfa_offset: 0.02
+  # wav processors
+  wav_processors: [ ]
+  save_sil_mask: true
+  vad_max_silence_length: 12
+
+# train
+max_sentences: 48
+max_updates: 200000
+
+
+# FastDiff vocoder
+vocoder: FastDiff
+N: 4 # denoising steps
+vocoder_ckpt: checkpoints/FastDiff
+
+# eval
+use_gt_dur: false
+use_gt_f0: false
+gen_tgt_spk_id: -1
+num_sanity_val_steps: -1
+num_valid_plots: 10
+use_cond_disc: true
+save_gt: true
+num_test_samples: 20
+max_valid_sentences: 1
+text: the invention of movable metal letters in the middle of the fifteenth century may justly be considered as the invention of the art of printing.
+
+
+# variation
+pitch_type: frame
+pitch_extractor: 'parselmouth'
+use_pitch_embed: true
+use_energy_embed: true
+mel_loss: "ssim:0.5|l1:0.5"
+
+
+
+

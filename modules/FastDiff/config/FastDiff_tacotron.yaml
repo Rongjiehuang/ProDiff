@@ -1,0 +1,58 @@
+base_config:
+  - egs/egs_bases/tts/vocoder/pwg.yaml
+  - egs/egs_bases/tts/base_mel2wav.yaml
+  - egs/datasets/audio/lj/pwg.yaml
+
+raw_data_dir: 'data/raw/LJSpeech-1.1'
+processed_data_dir: 'data/processed/LJSpeech_FastDiff'
+#binary_data_dir: 'data/binary/LJSpeech_Taco'
+binary_data_dir: /apdcephfs/private_nlphuang/preprocess/AdaGrad/data/binary/LJSpeech_Taco
+
+binarizer_cls: data_gen.tts.vocoder_binarizer.VocoderBinarizer
+pre_align_cls: egs.datasets.audio.lj.pre_align.LJPreAlign
+task_cls: modules.FastDiff.task.FastDiff.FastDiffTask
+binarization_args:
+  with_wav: true
+  with_spk_embed: false
+  with_align: false
+  with_word: false
+  with_txt: false
+  with_f0: false
+
+# data
+num_spk: 400
+max_samples: 25600
+aux_context_window: 0
+max_sentences: 20
+test_input_dir: '' # 'wavs' # wav->wav inference
+test_mel_dir: '' # 'mels' # mel->wav inference
+use_wav: True # mel->wav inference
+
+# training
+num_sanity_val_steps: -1
+max_updates: 1000000
+lr: 2e-4
+weight_decay: 0
+
+# FastDiff
+audio_channels: 1
+inner_channels: 32
+cond_channels: 80
+upsample_ratios: [8, 8, 4]
+lvc_layers_each_block: 4
+lvc_kernel_size: 3
+kpnet_hidden_channels: 64
+kpnet_conv_size: 3
+dropout: 0.0
+diffusion_step_embed_dim_in: 128
+diffusion_step_embed_dim_mid: 512
+diffusion_step_embed_dim_out: 512
+use_weight_norm: True
+
+# Diffusion
+T: 1000
+beta_0: 0.000001
+beta_T: 0.01
+noise_schedule: ''
+N: ''
+

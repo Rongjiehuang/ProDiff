@@ -1,0 +1,13 @@
+base_config:
+  - ./base.yaml
+
+raw_data_dir: 'data/raw/LJSpeech'
+processed_data_dir: 'data/processed/LJSpeech'
+binary_data_dir: 'data/binary/LJSpeech'
+
+task_cls: modules.ProDiff.task.ProDiff_teacher_task.ProDiff_teacher_Task
+
+# diffusion
+timesteps: 4
+timescale: 1
+schedule_type: 'vpsde'

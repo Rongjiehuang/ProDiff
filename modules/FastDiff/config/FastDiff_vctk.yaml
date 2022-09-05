@@ -1,0 +1,7 @@
+base_config:
+  - ./base.yaml
+
+audio_sample_rate: 22050
+raw_data_dir: 'data/raw/VCTK'
+processed_data_dir: 'data/processed/VCTK'
+binary_data_dir: 'data/binary/VCTK'

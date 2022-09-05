@@ -1,0 +1,25 @@
+base_config:
+  - egs/egs_bases/tts/vocoder/base.yaml
+  - egs/datasets/audio/lj/base_mel2wav.yaml
+  - ./base.yaml
+
+#raw_data_dir: '/home1/huangrongjie/dataset/sc09/data/'
+#processed_data_dir: 'data/processed/SC09'
+#binary_data_dir: 'data/binary/SC09'
+
+raw_data_dir: '/home1/huangrongjie/Project/AdaGrad/data/raw/SC09/'
+processed_data_dir: 'data/processed/SC09_ten_processed'
+binary_data_dir: 'data/binary/SC09_ten_processed'
+
+pre_align_cls: egs.datasets.audio.sc09.pre_align.Sc09PreAlign
+audio_sample_rate: 16000
+max_samples: 12800
+
+pre_align_args:
+  sox_resample: false
+  sox_to_wav: false
+  allow_no_txt: true
+  trim_sil: true
+  denoise: true
+
+loud_norm: true

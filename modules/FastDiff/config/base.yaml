@@ -1,0 +1,157 @@
+#############
+# Custom dataset preprocess
+#############
+audio_num_mel_bins: 80
+audio_sample_rate: 22050
+hop_size: 256  # For 22050Hz, 275 ~= 12.5 ms (0.0125 * sample_rate)
+win_size: 1024  # For 22050Hz, 1100 ~= 50 ms (If None, win_size: fft_size) (0.05 * sample_rate)
+fmin: 80  # Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
+fmax: 7600  # To be increased/reduced depending on data.
+fft_size: 1024  # Extra window size is filled with 0 paddings to match this parameter
+min_level_db: -100
+ref_level_db: 20
+griffin_lim_iters: 60
+num_spk: 1 # number of speakers
+mel_vmin: -6
+mel_vmax: 1.5
+
+#############
+# FastDiff Model
+#############
+audio_channels: 1
+inner_channels: 32
+cond_channels: 80
+upsample_ratios: [8, 8, 4]
+lvc_layers_each_block: 4
+lvc_kernel_size: 3
+kpnet_hidden_channels: 64
+kpnet_conv_size: 3
+dropout: 0.0
+diffusion_step_embed_dim_in: 128
+diffusion_step_embed_dim_mid: 512
+diffusion_step_embed_dim_out: 512
+use_weight_norm: True
+
+###########
+# Diffusion
+###########
+T: 1000
+beta_0: 0.000001
+beta_T: 0.01
+noise_schedule: ''
+N: ''
+
+
+###########
+# train and eval
+###########
+task_cls: modules.FastDiff.task.FastDiff.FastDiffTask
+max_updates: 1000000 # max training steps
+max_samples: 25600 # audio length in training
+max_sentences: 20 # max batch size in training
+num_sanity_val_steps: -1
+max_valid_sentences: 1
+valid_infer_interval: 10000
+val_check_interval: 2000
+num_test_samples: 0
+num_valid_plots: 10
+
+
+#############
+# Stage 1 of data processing
+#############
+pre_align_cls: egs.datasets.audio.pre_align.PreAlign
+pre_align_args:
+  nsample_per_mfa_group: 1000
+  txt_processor: en
+  use_tone: true # for ZH
+  sox_resample: false
+  sox_to_wav: false
+  allow_no_txt: true
+  trim_sil: false
+  denoise: false
+
+
+#############
+# Stage 2 of data processing
+#############
+binarizer_cls: data_gen.tts.vocoder_binarizer.VocoderBinarizer
+binarization_args:
+  with_wav: true
+  with_spk_embed: false
+  with_align: false
+  with_word: false
+  with_txt: false
+  with_f0: false
+  shuffle: false
+  with_spk_id: true
+  with_f0cwt: false
+  with_linear: false
+  trim_eos_bos: false
+  reset_phone_dict: true
+  reset_word_dict: true
+
+
+###########
+# optimization
+###########
+lr: 2e-4    # learning rate
+weight_decay: 0
+scheduler: rsqrt # rsqrt|none
+optimizer_adam_beta1: 0.9
+optimizer_adam_beta2: 0.98
+clip_grad_norm: 1
+clip_grad_value: 0
+
+#############
+# Setting for this Pytorch framework
+#############
+max_input_tokens: 1550
+frames_multiple: 1
+use_word_input: false
+vocoder: FastDiff
+vocoder_ckpt: checkpoints/FastDiff
+vocoder_denoise_c: 0.0
+max_tokens: 30000
+max_valid_tokens: 60000
+test_ids: [ ]
+profile_infer: false
+out_wav_norm: false
+save_gt: true
+save_f0: false
+aux_context_window: 0
+test_input_dir: '' # 'wavs' # wav->wav inference
+test_mel_dir: '' # 'mels' # mel->wav inference
+use_wav: True # mel->wav inference
+pitch_extractor: parselmouth
+loud_norm: false
+endless_ds: true
+test_num: 100
+min_frames: 0
+max_frames: 1548
+ds_workers: 1
+gen_dir_name: ''
+accumulate_grad_batches: 1
+tb_log_interval: 100
+print_nan_grads: false
+work_dir: '' # experiment directory.
+infer: false # inference
+amp: false
+debug: false
+save_codes: []
+save_best: true
+num_ckpt_keep: 3
+sort_by_len: true
+load_ckpt: ''
+check_val_every_n_epoch: 10
+max_epochs: 1000
+eval_max_batches: -1
+resume_from_checkpoint: 0
+rename_tmux: true
+valid_monitor_key: 'val_loss'
+valid_monitor_mode: 'min'
+train_set_name: 'train'
+train_sets: ''
+valid_set_name: 'valid'
+test_set_name: 'test'
+seed: 1234
