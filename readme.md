@@ -119,7 +119,7 @@ as described in our code.
 
 ## Citations ##
 If you find this code useful in your research, please cite our work:
-```
+```bib
 @inproceedings{huang2022prodiff,
   title={ProDiff: Progressive Fast Diffusion Model For High-Quality Text-to-Speech},
   author={Huang, Rongjie and Zhao, Zhou and Liu, Huadai and Liu, Jinglin and Cui, Chenye and Ren, Yi},
