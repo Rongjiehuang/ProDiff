@@ -29,7 +29,17 @@ To try on your own dataset, simply clone this repo in your local machine provide
 
 ### Support Datasets and Pretrained Models
 
-You can also use pretrained models we provide [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/rongjiehuang_zju_edu_cn/Eo7r83WZPK1GmlwvFhhIKeQBABZpYW3ec9c8WZoUV5HhbA?e=9QoWnf).
+Simply run following command to download the weights
+```python
+  from huggingface_hub import snapshot_download 
+  downloaded_path = snapshot_download(repo_id="Rongjiehuang/ProDiff")
+```
+
+and move the downloaded checkpoints to `checkpoints/$Model/model_ckpt_steps_*.ckpt`
+```bash
+   mv ${downloaded_path}/checkpoints/  checkpoints/
+```
+
 Details of each folder are as in follows:
 
 | Model             | Dataset     | Config                                          | 
@@ -37,9 +47,10 @@ Details of each folder are as in follows:
 | ProDiff Teacher   | LJSpeech    | `modules/ProDiff/config/prodiff_teacher.yaml`   | 
 | ProDiff           | LJSpeech    | `modules/ProDiff/config/prodiff.yaml`           | 
 
+
 More supported datasets are coming soon.
 
-Put the checkpoints in `checkpoints/$Model/model_ckpt_steps_*.ckpt`
+
 
 ### Dependencies
 See requirements in `requirement.txt`:
@@ -86,7 +97,9 @@ python data_gen/tts/runs/train_mfa_align.py --config $CONFIG_NAME
 CUDA_VISIBLE_DEVICES=$GPU python data_gen/tts/bin/binarize.py --config $path/to/config
 ```
 
+You could also build a dataset via [NATSpeech](https://github.com/NATSpeech/NATSpeech), which shares a common MFA data-processing procedure.
 We also provide our processed LJSpeech dataset [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/rongjiehuang_zju_edu_cn/Eo7r83WZPK1GmlwvFhhIKeQBABZpYW3ec9c8WZoUV5HhbA?e=9QoWnf).
+
 
 ### Training Teacher of ProDiff 
 ```bash
