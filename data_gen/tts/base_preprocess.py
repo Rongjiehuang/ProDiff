@@ -119,7 +119,7 @@ class BasePreprocessor:
         try:
             if txt_loader is not None:
                 txt_raw = txt_loader(txt_raw)
-            ph, txt, word, ph2word, ph_gb_word = cls.txt_to_ph(txt_processor, txt_raw, preprocess_args)
+            ph, txt, word, ph2word, ph_gb_word = cls.txt_to_ph(txt_processor, txt_raw, preprocess_args, extend=True)
             wav_fn, wav_align_fn = cls.process_wav(
                 item_name, wav_fn,
                 hparams['processed_data_dir'],
@@ -143,9 +143,15 @@ class BasePreprocessor:
             return None
 
     @staticmethod
-    def txt_to_ph(txt_processor, txt_raw, preprocess_args):
+    def txt_to_ph(txt_processor, txt_raw, preprocess_args, extend=False):
         txt_struct, txt = txt_processor.process(txt_raw, preprocess_args)
         ph = [p for w in txt_struct for p in w[1]]
+        if extend:
+            ph_gb_word = ["_".join(w[1]) for w in txt_struct]
+            words = [w[0] for w in txt_struct]
+            # word_id=0 is reserved for padding
+            ph2word = [w_id + 1 for w_id, w in enumerate(txt_struct) for _ in range(len(w[1]))]
+            return " ".join(ph), txt, " ".join(words), ph2word, " ".join(ph_gb_word)
         return " ".join(ph), txt
 
     @staticmethod
