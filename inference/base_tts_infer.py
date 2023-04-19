@@ -122,7 +122,7 @@ class BaseTTSInfer:
         preprocessor, preprocess_args = self.preprocessor, self.preprocess_args
         text_raw = inp['text']
         item_name = inp.get('item_name', '<ITEM_NAME>')
-        spk_name = inp.get('spk_name', 'SPK1')
+        spk_name = inp.get('spk_name', '<SINGLE_SPK>')
         ph, txt = preprocessor.txt_to_ph(
             preprocessor.txt_processor, text_raw, preprocess_args)
         ph_token = self.ph_encoder.encode(ph)
