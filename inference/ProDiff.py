@@ -10,6 +10,10 @@ from functools import partial
 
 class ProDiffInfer(BaseTTSInfer):
     def build_model(self):
+        if 'f0_mean' not in hparams:
+            hparams['f0_mean'] = 1.0
+        if 'f0_std' not in hparams:
+            hparams['f0_std'] = 1.0
         f0_stats_fn = f'{hparams["binary_data_dir"]}/train_f0s_mean_std.npy'
         if os.path.exists(f0_stats_fn):
             hparams['f0_mean'], hparams['f0_std'] = np.load(f0_stats_fn)
